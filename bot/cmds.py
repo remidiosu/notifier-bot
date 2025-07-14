@@ -10,6 +10,7 @@ from bot.checker import check_site
 CHECK_INTERVAL = 10
 router = Router()
 
+
 @router.message(CommandStart())
 async def start_cmd(message: Message):
     say_hi = (
@@ -28,7 +29,9 @@ async def add_cmd(message: Message):
     parts = message.text.split(maxsplit=1)
 
     if len(parts) != 2:
-        return await message.answer("Введите URL после команды: /add https://example.com")
+        return await message.answer(
+            "Введите URL после команды: /add https://example.com"
+        )
 
     url = parts[1].strip()
     if not url.startswith("http"):
@@ -39,7 +42,7 @@ async def add_cmd(message: Message):
         return await message.answer("Этот сайт уже добавлен.")
     if len(urls) >= 5:
         return await message.answer("Можно добавить не более 5 сайтов.")
-    
+
     await UserURL.create(user_id=user_id, url=url)
     await message.answer(f"✅ {url} добавлен в список для мониторинга.")
     logging.info(f"/add command used by user {user_id}: {message.text}")
@@ -51,7 +54,9 @@ async def delete_cmd(message: Message):
     parts = message.text.split(maxsplit=1)
 
     if len(parts) != 2:
-        return await message.answer("Введите URL после команды: /delete https://example.com")
+        return await message.answer(
+            "Введите URL после команды: /delete https://example.com"
+        )
 
     url = parts[1].strip()
     urls = await UserURL.filter(user_id=user_id).values_list("url", flat=True)
@@ -63,14 +68,15 @@ async def delete_cmd(message: Message):
     logging.info(f"/delete command used by user {user_id}: {message.text}")
 
 
-
 @router.message(Command("list"))
 async def list_cmd(message: Message):
     user_id = message.from_user.id
     urls = await UserURL.filter(user_id=user_id).values_list("url", flat=True)
 
     if not urls:
-        return await message.answer("У вас нет сайтов в списке мониторинга. Используйте /add __ ")
+        return await message.answer(
+            "У вас нет сайтов в списке мониторинга. Используйте /add __ "
+        )
 
     formatted = "\n".join(f"- {url}" for url in urls)
     await message.answer(f"Ваши сайты:\n{formatted}")

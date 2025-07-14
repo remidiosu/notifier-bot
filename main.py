@@ -1,4 +1,5 @@
 from bot.logger_config import setup_logger
+
 setup_logger()
 
 import asyncio
@@ -20,10 +21,12 @@ dp = Dispatcher(storage=MemoryStorage())
 
 dp.include_router(router)
 
+
 async def main():
     await init_db()
     asyncio.create_task(start_periodic_check(bot))
     await dp.start_polling(bot)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     asyncio.run(main())

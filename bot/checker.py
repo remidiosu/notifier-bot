@@ -1,6 +1,7 @@
 import aiohttp
 from aiohttp import ClientTimeout
 
+
 async def check_site(url: str) -> bool:
     try:
         timeout = ClientTimeout(total=5)

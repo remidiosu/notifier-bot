@@ -3,6 +3,7 @@ from tortoise.models import Model
 from dotenv import load_dotenv
 import os
 
+
 class UserURL(Model):
     id = fields.IntField(pk=True)
     user_id = fields.BigIntField()
@@ -10,6 +11,7 @@ class UserURL(Model):
 
     class Meta:
         table = "user_urls"
+
 
 async def init_db():
     load_dotenv()
@@ -19,8 +21,5 @@ async def init_db():
         f"@{os.getenv('MYSQL_HOST')}:{os.getenv('MYSQL_PORT')}/{os.getenv('MYSQL_DB')}"
     )
 
-    await Tortoise.init(
-        db_url=db_url,
-        modules={"models": ["bot.db"]}
-    )
+    await Tortoise.init(db_url=db_url, modules={"models": ["bot.db"]})
     await Tortoise.generate_schemas()
