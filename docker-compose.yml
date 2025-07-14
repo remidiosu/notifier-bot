@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  mysql:
+    image: mysql:8
+    container_name: notifier-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 123321 
+      MYSQL_DATABASE: notifier_db
+      MYSQL_USER: gulnur
+      MYSQL_PASSWORD: 123321
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  bot:
+    build:
+      context: .
+    container_name: notifier-bot
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      
+volumes:
+  mysql_data:

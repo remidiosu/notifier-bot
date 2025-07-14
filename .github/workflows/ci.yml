@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.12-slim
+
+    - name: Install Python deps
+      run: |
+        pip install -r requirements.txt
+        pip install black
+
+    - name: Lint with black
+      run: |
+        black . --check
+
+    - name: Test Docker build
+      run: docker build -t notifier-bot .
